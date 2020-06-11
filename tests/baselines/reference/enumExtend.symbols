@@ -1,0 +1,70 @@
+=== tests/cases/compiler/enumExtend.ts ===
+enum A {
+>A : Symbol(A, Decl(enumExtend.ts, 0, 0))
+
+    a, b, c
+>a : Symbol(A.a, Decl(enumExtend.ts, 0, 8))
+>b : Symbol(A.b, Decl(enumExtend.ts, 1, 6))
+>c : Symbol(A.c, Decl(enumExtend.ts, 1, 9))
+}
+
+enum B {
+>B : Symbol(B, Decl(enumExtend.ts, 2, 1))
+
+    ...A,
+>A : Symbol(B.A, Decl(enumExtend.ts, 5, 7))
+
+    d, e, f
+>d : Symbol(B.d, Decl(enumExtend.ts, 5, 9))
+>e : Symbol(B.e, Decl(enumExtend.ts, 6, 6))
+>f : Symbol(B.f, Decl(enumExtend.ts, 6, 9))
+}
+
+const Aa = A.a;
+>Aa : Symbol(Aa, Decl(enumExtend.ts, 9, 5))
+>A.a : Symbol(A.a, Decl(enumExtend.ts, 0, 8))
+>A : Symbol(A, Decl(enumExtend.ts, 0, 0))
+>a : Symbol(A.a, Decl(enumExtend.ts, 0, 8))
+
+const Ab = A.b;
+>Ab : Symbol(Ab, Decl(enumExtend.ts, 10, 5))
+>A.b : Symbol(A.b, Decl(enumExtend.ts, 1, 6))
+>A : Symbol(A, Decl(enumExtend.ts, 0, 0))
+>b : Symbol(A.b, Decl(enumExtend.ts, 1, 6))
+
+const Ac = A.c;
+>Ac : Symbol(Ac, Decl(enumExtend.ts, 11, 5))
+>A.c : Symbol(A.c, Decl(enumExtend.ts, 1, 9))
+>A : Symbol(A, Decl(enumExtend.ts, 0, 0))
+>c : Symbol(A.c, Decl(enumExtend.ts, 1, 9))
+
+const Ba = B.a;
+>Ba : Symbol(Ba, Decl(enumExtend.ts, 12, 5))
+>B : Symbol(B, Decl(enumExtend.ts, 2, 1))
+
+const Bb = B.b;
+>Bb : Symbol(Bb, Decl(enumExtend.ts, 13, 5))
+>B : Symbol(B, Decl(enumExtend.ts, 2, 1))
+
+const Bc = B.c;
+>Bc : Symbol(Bc, Decl(enumExtend.ts, 14, 5))
+>B : Symbol(B, Decl(enumExtend.ts, 2, 1))
+
+const Bd = B.d;
+>Bd : Symbol(Bd, Decl(enumExtend.ts, 15, 5))
+>B.d : Symbol(B.d, Decl(enumExtend.ts, 5, 9))
+>B : Symbol(B, Decl(enumExtend.ts, 2, 1))
+>d : Symbol(B.d, Decl(enumExtend.ts, 5, 9))
+
+const Be = B.e;
+>Be : Symbol(Be, Decl(enumExtend.ts, 16, 5))
+>B.e : Symbol(B.e, Decl(enumExtend.ts, 6, 6))
+>B : Symbol(B, Decl(enumExtend.ts, 2, 1))
+>e : Symbol(B.e, Decl(enumExtend.ts, 6, 6))
+
+const Bf = B.f;
+>Bf : Symbol(Bf, Decl(enumExtend.ts, 17, 5))
+>B.f : Symbol(B.f, Decl(enumExtend.ts, 6, 9))
+>B : Symbol(B, Decl(enumExtend.ts, 2, 1))
+>f : Symbol(B.f, Decl(enumExtend.ts, 6, 9))
+

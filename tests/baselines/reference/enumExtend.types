@@ -1,0 +1,76 @@
+=== tests/cases/compiler/enumExtend.ts ===
+enum A {
+>A : A
+
+    a, b, c
+>a : A.a
+>b : A.b
+>c : A.c
+}
+
+enum B {
+>B : B
+
+    ...A,
+>A : B.A
+
+    d, e, f
+>d : B.d
+>e : B.e
+>f : B.f
+}
+
+const Aa = A.a;
+>Aa : A.a
+>A.a : A.a
+>A : typeof A
+>a : A.a
+
+const Ab = A.b;
+>Ab : A.b
+>A.b : A.b
+>A : typeof A
+>b : A.b
+
+const Ac = A.c;
+>Ac : A.c
+>A.c : A.c
+>A : typeof A
+>c : A.c
+
+const Ba = B.a;
+>Ba : any
+>B.a : any
+>B : typeof B
+>a : any
+
+const Bb = B.b;
+>Bb : any
+>B.b : any
+>B : typeof B
+>b : any
+
+const Bc = B.c;
+>Bc : any
+>B.c : any
+>B : typeof B
+>c : any
+
+const Bd = B.d;
+>Bd : B.d
+>B.d : B.d
+>B : typeof B
+>d : B.d
+
+const Be = B.e;
+>Be : B.e
+>B.e : B.e
+>B : typeof B
+>e : B.e
+
+const Bf = B.f;
+>Bf : B.f
+>B.f : B.f
+>B : typeof B
+>f : B.f
+
