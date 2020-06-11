@@ -1,18 +1,15 @@
-tests/cases/compiler/enumExtend.ts(6,5): error TS1132: Enum member expected.
-tests/cases/compiler/enumExtend.ts(13,14): error TS2551: Property 'a' does not exist on type 'typeof B'. Did you mean 'A'?
+tests/cases/compiler/enumExtend.ts(13,14): error TS2339: Property 'a' does not exist on type 'typeof B'.
 tests/cases/compiler/enumExtend.ts(14,14): error TS2339: Property 'b' does not exist on type 'typeof B'.
 tests/cases/compiler/enumExtend.ts(15,14): error TS2339: Property 'c' does not exist on type 'typeof B'.
 
 
-==== tests/cases/compiler/enumExtend.ts (4 errors) ====
+==== tests/cases/compiler/enumExtend.ts (3 errors) ====
     enum A {
         a, b, c
     }
     
     enum B {
         ...A,
-        ~~~
-!!! error TS1132: Enum member expected.
         d, e, f
     }
     
@@ -21,8 +18,7 @@ tests/cases/compiler/enumExtend.ts(15,14): error TS2339: Property 'c' does not e
     const Ac = A.c;
     const Ba = B.a;
                  ~
-!!! error TS2551: Property 'a' does not exist on type 'typeof B'. Did you mean 'A'?
-!!! related TS2728 tests/cases/compiler/enumExtend.ts:6:8: 'A' is declared here.
+!!! error TS2339: Property 'a' does not exist on type 'typeof B'.
     const Bb = B.b;
                  ~
 !!! error TS2339: Property 'b' does not exist on type 'typeof B'.

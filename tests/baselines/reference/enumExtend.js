@@ -28,10 +28,10 @@ var A;
 })(A || (A = {}));
 var B;
 (function (B) {
-    B[B["A"] = 0] = "A";
-    B[B["d"] = 1] = "d";
-    B[B["e"] = 2] = "e";
-    B[B["f"] = 3] = "f";
+    B[B["A"] = void 0] = "A";
+    B[B["d"] = 0] = "d";
+    B[B["e"] = 1] = "e";
+    B[B["f"] = 2] = "f";
 })(B || (B = {}));
 var Aa = A.a;
 var Ab = A.b;

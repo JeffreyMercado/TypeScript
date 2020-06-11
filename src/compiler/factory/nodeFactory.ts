@@ -400,6 +400,8 @@ namespace ts {
             updateSpreadAssignment,
             createEnumMember,
             updateEnumMember,
+            createEnumMemberSet,
+            updateEnumMemberSet,
             createSourceFile,
             updateSourceFile,
             createBundle,
@@ -3544,7 +3546,7 @@ namespace ts {
             decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
             name: string | Identifier,
-            members: readonly EnumMember[]
+            members: readonly (EnumMember | EnumMemberSet)[]
         ) {
             const node = createBaseNamedDeclaration<EnumDeclaration>(
                 SyntaxKind.EnumDeclaration,
@@ -3565,7 +3567,7 @@ namespace ts {
             decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
             name: Identifier,
-            members: readonly EnumMember[]) {
+            members: readonly (EnumMember | EnumMemberSet)[]) {
             return node.decorators !== decorators
                 || node.modifiers !== modifiers
                 || node.name !== name
@@ -4719,6 +4721,23 @@ namespace ts {
             return node.name !== name
                 || node.initializer !== initializer
                 ? update(createEnumMember(name, initializer), node)
+                : node;
+        }
+
+        // @api
+        function createEnumMemberSet(name: string | Identifier) {
+            const node = createBaseNode<EnumMemberSet>(SyntaxKind.EnumMemberSet);
+            node.name = asName(name);
+            node.transformFlags |=
+                propagateChildFlags(node.name) |
+                TransformFlags.ContainsTypeScript;
+            return node;
+        }
+
+        // @api
+        function updateEnumMemberSet(node: EnumMemberSet, name: Identifier) {
+            return node.name !== name
+                ? update(createEnumMemberSet(name), node)
                 : node;
         }
 

@@ -287,8 +287,15 @@ namespace ts.NavigationBar {
             case SyntaxKind.EnumDeclaration:
                 startNode(node);
                 for (const member of (<EnumDeclaration>node).members) {
-                    if (!isComputedProperty(member)) {
-                        addLeafNode(member);
+                    switch (member.kind) {
+                        case SyntaxKind.EnumMember:
+                            if (!isComputedProperty(member)) {
+                                addLeafNode(member);
+                            }
+                        break;
+                        case SyntaxKind.EnumMemberSet:
+                            notImplemented();
+                            break;
                     }
                 }
                 endNode();

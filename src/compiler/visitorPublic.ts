@@ -899,7 +899,7 @@ namespace ts {
                     nodesVisitor((<EnumDeclaration>node).decorators, visitor, isDecorator),
                     nodesVisitor((<EnumDeclaration>node).modifiers, visitor, isModifier),
                     nodeVisitor((<EnumDeclaration>node).name, visitor, isIdentifier),
-                    nodesVisitor((<EnumDeclaration>node).members, visitor, isEnumMember));
+                    nodesVisitor((<EnumDeclaration>node).members, visitor, isEnumMemberOrEnumMemberSet));
 
             case SyntaxKind.ModuleDeclaration:
                 return factory.updateModuleDeclaration(<ModuleDeclaration>node,
@@ -1070,6 +1070,9 @@ namespace ts {
                 return factory.updateEnumMember(<EnumMember>node,
                     nodeVisitor((<EnumMember>node).name, visitor, isPropertyName),
                     nodeVisitor((<EnumMember>node).initializer, visitor, isExpression));
+            case SyntaxKind.EnumMemberSet:
+                return factory.updateEnumMemberSet(<EnumMemberSet>node,
+                    nodeVisitor((<EnumMemberSet>node).name, visitor, isIdentifier));
 
             // Top-level nodes
             case SyntaxKind.SourceFile:

@@ -658,6 +658,14 @@ namespace ts {
         return node.kind === SyntaxKind.EnumMember;
     }
 
+    export function isEnumMemberSet(node: Node): node is EnumMemberSet {
+        return node.kind === SyntaxKind.EnumMemberSet;
+    }
+
+    export function isEnumMemberOrEnumMemberSet(node: Node): node is EnumMember | EnumMemberSet {
+        return node.kind === SyntaxKind.EnumMember || node.kind === SyntaxKind.EnumMemberSet;
+    }
+
     // Unparsed
 
     // TODO(rbuckton): isUnparsedPrologue

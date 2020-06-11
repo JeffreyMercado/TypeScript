@@ -1620,6 +1620,7 @@ namespace ts {
             || kind === SyntaxKind.Constructor
             || kind === SyntaxKind.EnumDeclaration
             || kind === SyntaxKind.EnumMember
+            || kind === SyntaxKind.EnumMemberSet
             || kind === SyntaxKind.ExportSpecifier
             || kind === SyntaxKind.FunctionDeclaration
             || kind === SyntaxKind.FunctionExpression

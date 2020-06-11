@@ -865,6 +865,9 @@ namespace ts {
     /** @deprecated Use `factory.createEnumMember` or the factory supplied by your transformation context instead. */
     export const createEnumMember = Debug.deprecate(factory.createEnumMember, factoryDeprecation);
 
+    /** @deprecated Use `factory.createEnumMemberSet` or the factory supplied by your transformation context instead. */
+    export const createEnumMemberSet = Debug.deprecate(factory.createEnumMemberSet, factoryDeprecation);
+
     /** @deprecated Use `factory.updateEnumMember` or the factory supplied by your transformation context instead. */
     export const updateEnumMember = Debug.deprecate(factory.updateEnumMember, factoryDeprecation);
 

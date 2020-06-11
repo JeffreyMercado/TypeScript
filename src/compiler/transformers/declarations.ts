@@ -1430,9 +1430,14 @@ namespace ts {
                 case SyntaxKind.EnumDeclaration: {
                     return cleanup(factory.updateEnumDeclaration(input, /*decorators*/ undefined, factory.createNodeArray(ensureModifiers(input)), input.name, factory.createNodeArray(mapDefined(input.members, m => {
                         if (shouldStripInternal(m)) return;
-                        // Rewrite enum values to their constants, if available
-                        const constValue = resolver.getConstantValue(m);
-                        return preserveJsDoc(factory.updateEnumMember(m, m.name, constValue !== undefined ? typeof constValue === "string" ? factory.createStringLiteral(constValue) : factory.createNumericLiteral(constValue) : undefined), m);
+                        switch (m.kind) {
+                            case SyntaxKind.EnumMember:
+                                // Rewrite enum values to their constants, if available
+                                const constValue = resolver.getConstantValue(m);
+                                return preserveJsDoc(factory.updateEnumMember(m, m.name, constValue !== undefined ? typeof constValue === "string" ? factory.createStringLiteral(constValue) : factory.createNumericLiteral(constValue) : undefined), m);
+                            case SyntaxKind.EnumMemberSet:
+                                return notImplemented();
+                        }
                     }))));
                 }
             }

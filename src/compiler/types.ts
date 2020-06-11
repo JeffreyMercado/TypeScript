@@ -342,6 +342,7 @@ namespace ts {
 
         // Enum
         EnumMember,
+        EnumMemberSet,
         // Unparsed
         UnparsedPrologue,
         UnparsedPrepend,
@@ -867,6 +868,7 @@ namespace ts {
         | InterfaceDeclaration
         | TypeAliasDeclaration
         | EnumMember
+        | EnumMemberSet
         | EnumDeclaration
         | ModuleDeclaration
         | ImportEqualsDeclaration
@@ -2825,10 +2827,16 @@ namespace ts {
         readonly initializer?: Expression;
     }
 
+    export interface EnumMemberSet extends NamedDeclaration, JSDocContainer {
+        readonly kind: SyntaxKind.EnumMemberSet;
+        readonly parent: EnumDeclaration;
+        readonly name: Identifier;
+    }
+
     export interface EnumDeclaration extends DeclarationStatement, JSDocContainer {
         readonly kind: SyntaxKind.EnumDeclaration;
         readonly name: Identifier;
-        readonly members: NodeArray<EnumMember>;
+        readonly members: NodeArray<EnumMember | EnumMemberSet>;
     }
 
     export type ModuleName =
@@ -6855,8 +6863,8 @@ namespace ts {
         updateInterfaceDeclaration(node: InterfaceDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly TypeElement[]): InterfaceDeclaration;
         createTypeAliasDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, type: TypeNode): TypeAliasDeclaration;
         updateTypeAliasDeclaration(node: TypeAliasDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, type: TypeNode): TypeAliasDeclaration;
-        createEnumDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | Identifier, members: readonly EnumMember[]): EnumDeclaration;
-        updateEnumDeclaration(node: EnumDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: Identifier, members: readonly EnumMember[]): EnumDeclaration;
+        createEnumDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | Identifier, members: readonly (EnumMember | EnumMemberSet)[]): EnumDeclaration;
+        updateEnumDeclaration(node: EnumDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: Identifier, members: readonly (EnumMember | EnumMemberSet)[]): EnumDeclaration;
         createModuleDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: ModuleName, body: ModuleBody | undefined, flags?: NodeFlags): ModuleDeclaration;
         updateModuleDeclaration(node: ModuleDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: ModuleName, body: ModuleBody | undefined): ModuleDeclaration;
         createModuleBlock(statements: readonly Statement[]): ModuleBlock;
@@ -7016,6 +7024,8 @@ namespace ts {
 
         createEnumMember(name: string | PropertyName, initializer?: Expression): EnumMember;
         updateEnumMember(node: EnumMember, name: PropertyName, initializer: Expression | undefined): EnumMember;
+        createEnumMemberSet(name: string | Identifier): EnumMemberSet;
+        updateEnumMemberSet(node: EnumMemberSet, name: Identifier): EnumMemberSet;
 
         //
         // Top-level nodes

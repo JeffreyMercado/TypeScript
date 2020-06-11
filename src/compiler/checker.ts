@@ -9170,11 +9170,17 @@ namespace ts {
             for (const declaration of symbol.declarations) {
                 if (declaration.kind === SyntaxKind.EnumDeclaration) {
                     for (const member of (<EnumDeclaration>declaration).members) {
-                        if (member.initializer && isStringLiteralLike(member.initializer)) {
-                            return links.enumKind = EnumKind.Literal;
-                        }
-                        if (!isLiteralEnumMember(member)) {
-                            hasNonLiteralMember = true;
+                        switch (member.kind) {
+                            case SyntaxKind.EnumMember:
+                                if (member.initializer && isStringLiteralLike(member.initializer)) {
+                                    return links.enumKind = EnumKind.Literal;
+                                }
+                                if (!isLiteralEnumMember(member)) {
+                                    hasNonLiteralMember = true;
+                                }
+                                break;
+                            case SyntaxKind.EnumMemberSet:
+                                break;
                         }
                     }
                 }
@@ -9197,10 +9203,16 @@ namespace ts {
                 for (const declaration of symbol.declarations) {
                     if (declaration.kind === SyntaxKind.EnumDeclaration) {
                         for (const member of (<EnumDeclaration>declaration).members) {
-                            const value = getEnumMemberValue(member);
-                            const memberType = getFreshTypeOfLiteralType(getLiteralType(value !== undefined ? value : 0, enumCount, getSymbolOfNode(member)));
-                            getSymbolLinks(getSymbolOfNode(member)).declaredType = memberType;
-                            memberTypeList.push(getRegularTypeOfLiteralType(memberType));
+                            switch (member.kind) {
+                                case SyntaxKind.EnumMember:
+                                    const value = getEnumMemberValue(member);
+                                    const memberType = getFreshTypeOfLiteralType(getLiteralType(value !== undefined ? value : 0, enumCount, getSymbolOfNode(member)));
+                                    getSymbolLinks(getSymbolOfNode(member)).declaredType = memberType;
+                                    memberTypeList.push(getRegularTypeOfLiteralType(memberType));
+                                    break;
+                                case SyntaxKind.EnumMemberSet:
+                                    break;
+                            }
                         }
                     }
                 }
@@ -34338,9 +34350,15 @@ namespace ts {
                 nodeLinks.flags |= NodeCheckFlags.EnumValuesComputed;
                 let autoValue: number | undefined = 0;
                 for (const member of node.members) {
-                    const value = computeMemberValue(member, autoValue);
-                    getNodeLinks(member).enumMemberValue = value;
-                    autoValue = typeof value === "number" ? value + 1 : undefined;
+                    switch (member.kind) {
+                        case SyntaxKind.EnumMember:
+                            const value = computeMemberValue(member, autoValue);
+                            getNodeLinks(member).enumMemberValue = value;
+                            autoValue = typeof value === "number" ? value + 1 : undefined;
+                            break;
+                        case SyntaxKind.EnumMemberSet:
+                            break;
+                    }
                 }
             }
         }
@@ -34552,7 +34570,7 @@ namespace ts {
                     }
 
                     const firstEnumMember = enumDeclaration.members[0];
-                    if (!firstEnumMember.initializer) {
+                    if (firstEnumMember.kind === SyntaxKind.EnumMember && !firstEnumMember.initializer) {
                         if (seenEnumMissingInitialInitializer) {
                             error(firstEnumMember.name, Diagnostics.In_an_enum_with_multiple_declarations_only_one_declaration_can_omit_an_initializer_for_its_first_enum_element);
                         }

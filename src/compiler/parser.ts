@@ -373,6 +373,8 @@ namespace ts {
             case SyntaxKind.EnumMember:
                 return visitNode(cbNode, (<EnumMember>node).name) ||
                     visitNode(cbNode, (<EnumMember>node).initializer);
+            case SyntaxKind.EnumMemberSet:
+                return visitNode(cbNode, (<EnumMemberSet>node).name);
             case SyntaxKind.ModuleDeclaration:
                 return visitNodes(cbNode, cbNodes, node.decorators) ||
                     visitNodes(cbNode, cbNodes, node.modifiers) ||
@@ -1684,7 +1686,7 @@ namespace ts {
                 case ParsingContext.EnumMembers:
                     // Include open bracket computed properties. This technically also lets in indexers,
                     // which would be a candidate for improved error reporting.
-                    return token() === SyntaxKind.OpenBracketToken || isLiteralPropertyName();
+                    return token() === SyntaxKind.OpenBracketToken || token() === SyntaxKind.DotDotDotToken || isLiteralPropertyName();
                 case ParsingContext.ObjectLiteralMembers:
                     switch (token()) {
                         case SyntaxKind.OpenBracketToken:
@@ -2160,7 +2162,7 @@ namespace ts {
         }
 
         function isReusableEnumMember(node: Node) {
-            return node.kind === SyntaxKind.EnumMember;
+            return node.kind === SyntaxKind.EnumMember || node.kind === SyntaxKind.EnumMemberSet;
         }
 
         function isReusableTypeMember(node: Node) {
@@ -6495,16 +6497,28 @@ namespace ts {
             return withJSDoc(finishNode(factory.createEnumMember(name, initializer), pos), hasJSDoc);
         }
 
+        function parseEnumMemberSet(): EnumMemberSet {
+            parseExpected(SyntaxKind.DotDotDotToken);
+            const pos = getNodePos();
+            const hasJSDoc = hasPrecedingJSDocComment();
+            const name = parseIdentifier();
+            return withJSDoc(finishNode(factory.createEnumMemberSet(name), pos), hasJSDoc);
+        }
+
+        function parseEnumMemberOrEnumMemberSet(): EnumMember | EnumMemberSet {
+            return token() === SyntaxKind.DotDotDotToken ? parseEnumMemberSet() : parseEnumMember();
+        }
+
         function parseEnumDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): EnumDeclaration {
             parseExpected(SyntaxKind.EnumKeyword);
             const name = parseIdentifier();
             let members;
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
-                members = doOutsideOfYieldAndAwaitContext(() => parseDelimitedList(ParsingContext.EnumMembers, parseEnumMember));
+                members = doOutsideOfYieldAndAwaitContext(() => parseDelimitedList(ParsingContext.EnumMembers, parseEnumMemberOrEnumMemberSet));
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
             else {
-                members = createMissingList<EnumMember>();
+                members = createMissingList<EnumMember | EnumMemberSet>();
             }
             const node = factory.createEnumDeclaration(decorators, modifiers, name, members);
             return withJSDoc(finishNode(node, pos), hasJSDoc);

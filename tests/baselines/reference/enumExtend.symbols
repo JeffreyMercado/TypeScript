@@ -12,8 +12,6 @@ enum B {
 >B : Symbol(B, Decl(enumExtend.ts, 2, 1))
 
     ...A,
->A : Symbol(B.A, Decl(enumExtend.ts, 5, 7))
-
     d, e, f
 >d : Symbol(B.d, Decl(enumExtend.ts, 5, 9))
 >e : Symbol(B.e, Decl(enumExtend.ts, 6, 6))
